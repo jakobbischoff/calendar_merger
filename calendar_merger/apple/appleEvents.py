@@ -1,7 +1,6 @@
 import datetime
 import os
 from pyicloud import PyiCloudService
-import sys
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -19,15 +18,9 @@ key_mapping = {
 
 def getAppleEvents():
     api = PyiCloudService(os.environ['APPLE_EMAIL'], os.environ['APPLE_PASSWORD'])
-    if not api.is_trusted_session:
-        if api.requires_2fa:
-            print("Two-factor authentication required.")
-            code = input("Enter the code you received of one of your approved devices: ")
-            result = api.validate_2fa_code(code)
-            print("Code validation result: %s" % result)
-        else:
-            sys.exit()
-
+    if api.requires_2fa:
+        print("Error: 2FA is still required. Ensure you are using an app-specific password.")
+        exit()
 
     from_dt = datetime.datetime.now().date()
     to_dt = from_dt.replace(year=from_dt.year + 2)

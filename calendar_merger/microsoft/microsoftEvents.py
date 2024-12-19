@@ -55,11 +55,16 @@ def getMicrosoftEvents():
 
         start = datetime.datetime.fromisoformat(start_str)
         end = datetime.datetime.fromisoformat(end_str)
+
         if event['all_day']:
             start = start.date()
             end = end.date()
 
         event['start'] = start
         event['end'] = end
+
+    transformed_list = [event for event in transformed_list
+                        if (not event['all_day'] and event['end'] >= datetime.datetime.now()) or
+                        (event['all_day'] and event['end'] >= datetime.datetime.now().date())]
 
     return transformed_list

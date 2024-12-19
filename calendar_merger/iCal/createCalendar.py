@@ -9,7 +9,10 @@ def createCalendar(google_events, microsoft_events, apple_events):
     cal.add("prodid", "Calender created by Calendar Merger")
     cal.add("version", "2.0")
     cal.add("method", "PUBLISH")
+    cal.add("created", datetime.now())
+    cal.add('charset', 'UTF-8')
     counter = 0
+
     for x, event in enumerate(apple_events):
 
         name = event.get('name', 'Unnamed Event')
@@ -22,17 +25,18 @@ def createCalendar(google_events, microsoft_events, apple_events):
         url = event.get('url', None)
 
         event = Event()
-        event.add('name', name)
-        event.add('description', description)
+        event.add('SUMMARY', name)
+        event.add('DESCRIPTION', description)
         event.add('DTSTART', start)
         event.add('DTEND', end)
         event.add('DTSTAMP', datetime.now())
-        event.add("attachment", attachment)
-        event.add("url", url)
+        event.add('ATTACHMENT', attachment)
+        event.add('URL', url)
         event.add('UID', f"{x}")
-        event.add('priority', 1)
-        event.add("organizer", organizer)
-        event.add('location', location)
+        event.add('PRIORITY', 1)
+        event.add('LOCATION', location)
+        if organizer:
+            event.add('ORGANIZER', f"CN={organizer}")
         cal.add_component(event)
         counter += 1
 
@@ -44,14 +48,14 @@ def createCalendar(google_events, microsoft_events, apple_events):
         url = event.get('link', None)
 
         event = Event()
-        event.add('name', name)
-        event.add('description', description)
+        event.add('SUMMARY', name)
+        event.add('DESCRIPTION', description)
         event.add('DTSTART', start)
         event.add('DTEND', end)
         event.add('DTSTAMP', datetime.now())
-        event.add("url", url)
+        event.add("URL", url)
         event.add('UID', f"{counter}")
-        event.add('priority', 1)
+        event.add('PRIORITY', 1)
         cal.add_component(event)
         counter += 1
 
@@ -63,14 +67,14 @@ def createCalendar(google_events, microsoft_events, apple_events):
         url = event.get('link', None)
 
         event = Event()
-        event.add('name', name)
-        event.add('description', description)
+        event.add('SUMMARY', name)
+        event.add('DESCRIPTION', description)
         event.add('DTSTART', start)
         event.add('DTEND', end)
         event.add('DTSTAMP', datetime.now())
-        event.add("url", url)
+        event.add("URL", url)
         event.add('UID', f"{counter}")
-        event.add('priority', 1)
+        event.add('PRIORITY', 1)
         cal.add_component(event)
         counter += 1
 
